@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Cpu, Wifi, Thermometer, HardDrive, Zap, Code, Globe, Wrench } from "lucide-react";
+import { Cpu, Wifi, Thermometer, HardDrive, Zap, Code, Globe, Wrench, Shield, Server, Radio, BookOpen } from "lucide-react";
 
 const facts = [
   {
@@ -41,6 +41,26 @@ const facts = [
     icon: Wrench,
     title: "Config Hoarder",
     text: "Has a dedicated repo just for dotfiles and configs. Because losing your .vimrc is a personal crisis.",
+  },
+  {
+    icon: Shield,
+    title: "Owns an ASN",
+    text: "AS211767 — has a personal autonomous system number. Most people collect stamps; HON95 collects IP blocks.",
+  },
+  {
+    icon: Server,
+    title: "DNS Enthusiast",
+    text: "Runs authoritative DNS servers for personal domains. Because trusting someone else's DNS is living dangerously.",
+  },
+  {
+    icon: Radio,
+    title: "IoT Whisperer",
+    text: "Has ESP boards scattered around the house reporting metrics to Grafana. The house has more sensors than a spacecraft.",
+  },
+  {
+    icon: BookOpen,
+    title: "Wiki Maintainer",
+    text: "Maintains a massive personal wiki covering Linux, networking, containers, and more. It's basically a second brain on GitHub.",
   },
 ];
 

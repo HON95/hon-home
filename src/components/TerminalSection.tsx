@@ -2,12 +2,25 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const COMMANDS: Record<string, string> = {
-  help: "Available commands: help, whoami, skills, projects, uptime, neofetch, ping, clear",
+  help: "Available commands: help, whoami, skills, projects, uptime, neofetch, ping, whois, clear",
   whoami: "håvard ose nordstrand (HON95) — software engineer, Norway 🇳🇴",
   skills: "Rust • Go • C++ • Python • Docker • Prometheus • Linux • Networking • IoT",
   projects: "prometheus-nut-exporter (⭐133) | prometheus-esp8266-dht-exporter (⭐42) | wiki | configs",
   uptime: `Uptime: ${Math.floor((Date.now() - new Date("2010-01-01").getTime()) / 86400000)} days (since first GitHub commit)`,
   ping: "PONG! 🏓 latency: 0.42ms",
+  whois: `% RIPE Database Query — AS211767
+
+aut-num:       AS211767
+as-name:       HON-PERSONAL-AS
+descr:         Håvard's personal ASN
+org:           ORG-HON1-RIPE
+admin-c:       HON95-RIPE
+status:        ASSIGNED
+remarks:       Because running BGP at home is a perfectly normal hobby.
+remarks:       "It's not hoarding if it's network infrastructure."
+created:       Yes
+last-modified: Probably recently
+source:        RIPE # Filtered (with love)`,
   neofetch: `
   ╔══════════════════════╗
   ║   HON95@norway       ║
@@ -71,7 +84,7 @@ const TerminalSection = () => {
               <span className="w-3 h-3 rounded-full bg-destructive/70" />
               <span className="w-3 h-3 rounded-full opacity-70" style={{ backgroundColor: "hsl(45, 80%, 55%)" }} />
               <span className="w-3 h-3 rounded-full opacity-70" style={{ backgroundColor: "hsl(140, 60%, 45%)" }} />
-              <span className="ml-3 font-mono text-xs text-muted-foreground">hon95@norway:~</span>
+              <span className="ml-3 font-mono text-xs text-muted-foreground">hon95@norway</span>
             </div>
 
             {/* Terminal body */}
@@ -105,7 +118,7 @@ const TerminalSection = () => {
             </div>
           </div>
           <p className="text-muted-foreground text-xs mt-3 text-center">
-            Try typing <span className="text-primary font-mono">neofetch</span> or <span className="text-primary font-mono">whoami</span>
+            Try typing <span className="text-primary font-mono">neofetch</span>, <span className="text-primary font-mono">whoami</span>, or <span className="text-primary font-mono">whois</span>
           </p>
         </motion.div>
       </div>
