@@ -1,13 +1,28 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const COMMANDS: Record<string, string> = {
-  help: "Available commands: help, whoami, skills, projects, uptime, neofetch, ping, whois, clear",
-  whoami: "håvard ose nordstrand (HON95) — software engineer, Norway 🇳🇴",
+const getIpCommand = (): string => {
+  // Generate fake but realistic-looking addresses
+  const ipv4 = `${10}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*254)+1}`;
+  const ipv6Seg = () => Math.floor(Math.random()*65535).toString(16).padStart(4, '0');
+  const ipv6 = `fd${ipv6Seg().slice(0,2)}:${ipv6Seg()}:${ipv6Seg()}::${ipv6Seg().slice(-4)}/64`;
+  return `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
+    link/loopback 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+    link/ether de:ad:be:ef:ca:fe
+    inet ${ipv4}/24 brd ${ipv4.split('.').slice(0,3).join('.')}.255 scope global eth0
+    inet6 ${ipv6} scope global`;
+};
+
+const COMMANDS: Record<string, string | (() => string)> = {
+  help: "Available commands: help, ip, skills, projects, uptime, ping, whois, clear",
   skills: "Rust • Go • C++ • Python • Docker • Prometheus • Linux • Networking • IoT",
   projects: "prometheus-nut-exporter (⭐133) | prometheus-esp8266-dht-exporter (⭐42) | wiki | configs",
   uptime: `Uptime: ${Math.floor((Date.now() - new Date("2010-01-01").getTime()) / 86400000)} days (since first GitHub commit)`,
   ping: "PONG! 🏓 latency: 0.42ms",
+  ip: getIpCommand,
   whois: `% RIPE Database Query — AS211767
 
 aut-num:       AS211767
@@ -21,16 +36,6 @@ remarks:       "It's not hoarding if it's network infrastructure."
 created:       Yes
 last-modified: Probably recently
 source:        RIPE # Filtered (with love)`,
-  neofetch: `
-  ╔══════════════════════╗
-  ║   HON95@norway       ║
-  ║   ────────────────   ║
-  ║   OS: Linux          ║
-  ║   Shell: zsh         ║
-  ║   Editor: vim        ║
-  ║   Lang: Rust, Go     ║
-  ║   Uptime: ∞          ║
-  ╚══════════════════════╝`,
 };
 
 const TerminalSection = () => {
@@ -56,7 +61,8 @@ const TerminalSection = () => {
       return;
     }
 
-    const output = COMMANDS[cmd] || `command not found: ${cmd}. Try "help"`;
+    const raw = COMMANDS[cmd];
+    const output = raw ? (typeof raw === "function" ? raw() : raw) : `command not found: ${cmd}. Try "help"`;
     setHistory((h) => [...h, { cmd: input, output }]);
     setInput("");
   };
@@ -118,7 +124,7 @@ const TerminalSection = () => {
             </div>
           </div>
           <p className="text-muted-foreground text-xs mt-3 text-center">
-            Try typing <span className="text-primary font-mono">neofetch</span>, <span className="text-primary font-mono">whoami</span>, or <span className="text-primary font-mono">whois</span>
+            Try typing <span className="text-primary font-mono">ip</span>, <span className="text-primary font-mono">whois</span>, or <span className="text-primary font-mono">skills</span>
           </p>
         </motion.div>
       </div>

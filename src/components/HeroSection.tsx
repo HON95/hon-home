@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import heroBg from "@/assets/hero-bg.jpg";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 import useTypewriter from "@/hooks/useTypewriter";
 import FloatingParticles from "@/components/FloatingParticles";
 
@@ -59,6 +60,13 @@ const HeroSection = () => {
               <Github className="w-5 h-5" />
               GitHub
             </a>
+            <Link
+              to="/wiki"
+              className="inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:bg-secondary transition-colors"
+            >
+              <BookOpen className="w-5 h-5" />
+              Wiki
+            </Link>
             <a
               href="#games"
               className="inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:bg-secondary transition-colors"
