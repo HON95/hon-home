@@ -1,28 +1,36 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const getIpCommand = (): string => {
-  // Generate fake but realistic-looking addresses
-  const ipv4 = `${10}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*254)+1}`;
-  const ipv6Seg = () => Math.floor(Math.random()*65535).toString(16).padStart(4, '0');
-  const ipv6 = `fd${ipv6Seg().slice(0,2)}:${ipv6Seg()}:${ipv6Seg()}::${ipv6Seg().slice(-4)}/64`;
-  return `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
-    link/loopback 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-    inet6 ::1/128 scope host
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
-    link/ether de:ad:be:ef:ca:fe
-    inet ${ipv4}/24 brd ${ipv4.split('.').slice(0,3).join('.')}.255 scope global eth0
-    inet6 ${ipv6} scope global`;
+let cachedIp: string | null = null;
+
+const fetchRealIp = async (): Promise<string> => {
+  if (cachedIp) return cachedIp;
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    cachedIp = data.ip;
+    return data.ip;
+  } catch {
+    return "?.?.?.?";
+  }
 };
 
-const COMMANDS: Record<string, string | (() => string)> = {
+const COMMANDS: Record<string, string | (() => string | Promise<string>)> = {
   help: "Available commands: help, ip, skills, projects, uptime, ping, whois, clear",
   skills: "Rust • Go • C++ • Python • Docker • Prometheus • Linux • Networking • IoT",
   projects: "prometheus-nut-exporter (⭐133) | prometheus-esp8266-dht-exporter (⭐42) | wiki | configs",
   uptime: `Uptime: ${Math.floor((Date.now() - new Date("2010-01-01").getTime()) / 86400000)} days (since first GitHub commit)`,
   ping: "PONG! 🏓 latency: 0.42ms",
-  ip: getIpCommand,
+  ip: async () => {
+    const ip = await fetchRealIp();
+    return `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
+    link/loopback 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+    link/ether de:ad:be:ef:ca:fe
+    inet ${ip}/24 scope global eth0`;
+  },
   whois: `% RIPE Database Query — AS211767
 
 aut-num:       AS211767
@@ -43,6 +51,7 @@ const TerminalSection = () => {
     { cmd: "", output: 'Welcome to HON95 terminal. Type "help" to get started.' },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -50,10 +59,10 @@ const TerminalSection = () => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cmd = input.trim().toLowerCase();
-    if (!cmd) return;
+    if (!cmd || loading) return;
 
     if (cmd === "clear") {
       setHistory([]);
@@ -62,9 +71,33 @@ const TerminalSection = () => {
     }
 
     const raw = COMMANDS[cmd];
-    const output = raw ? (typeof raw === "function" ? raw() : raw) : `command not found: ${cmd}. Try "help"`;
-    setHistory((h) => [...h, { cmd: input, output }]);
-    setInput("");
+    if (!raw) {
+      setHistory((h) => [...h, { cmd: input, output: `command not found: ${cmd}. Try "help"` }]);
+      setInput("");
+      return;
+    }
+
+    if (typeof raw === "function") {
+      const result = raw();
+      if (result instanceof Promise) {
+        setHistory((h) => [...h, { cmd: input, output: "Loading..." }]);
+        setInput("");
+        setLoading(true);
+        const output = await result;
+        setHistory((h) => {
+          const updated = [...h];
+          updated[updated.length - 1] = { ...updated[updated.length - 1], output };
+          return updated;
+        });
+        setLoading(false);
+      } else {
+        setHistory((h) => [...h, { cmd: input, output: result }]);
+        setInput("");
+      }
+    } else {
+      setHistory((h) => [...h, { cmd: input, output: raw }]);
+      setInput("");
+    }
   };
 
   return (
@@ -118,6 +151,7 @@ const TerminalSection = () => {
                   className="flex-1 bg-transparent outline-none text-foreground caret-primary"
                   autoFocus
                   spellCheck={false}
+                  disabled={loading}
                 />
               </form>
               <div ref={endRef} />
