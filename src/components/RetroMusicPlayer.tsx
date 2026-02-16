@@ -1,14 +1,12 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 
-// Simple chiptune melody using Web Audio API
 const NOTES: Record<string, number> = {
   C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
   G4: 392.0, A4: 440.0, B4: 493.88,
   C5: 523.25, D5: 587.33, E5: 659.25,
 };
 
-// Korobeiniki-inspired melody (Tetris theme)
 const MELODY: [string, number][] = [
   ["E5", 0.4], ["B4", 0.2], ["C5", 0.2], ["D5", 0.4], ["C5", 0.2], ["B4", 0.2],
   ["A4", 0.4], ["A4", 0.2], ["C5", 0.2], ["E5", 0.4], ["D5", 0.2], ["C5", 0.2],
@@ -24,8 +22,10 @@ const RetroMusicPlayer = () => {
   const [playing, setPlaying] = useState(false);
   const ctxRef = useRef<AudioContext | null>(null);
   const timeoutIds = useRef<number[]>([]);
+  const autoplayAttempted = useRef(false);
 
   const playMelody = useCallback(() => {
+    if (ctxRef.current) return; // already playing
     const ctx = new AudioContext();
     ctxRef.current = ctx;
     const gainNode = ctx.createGain();
@@ -62,6 +62,7 @@ const RetroMusicPlayer = () => {
       timeoutIds.current.push(id);
     };
     loopFn();
+    setPlaying(true);
   }, []);
 
   const stop = useCallback(() => {
@@ -69,15 +70,35 @@ const RetroMusicPlayer = () => {
     timeoutIds.current = [];
     ctxRef.current?.close();
     ctxRef.current = null;
+    setPlaying(false);
   }, []);
 
-  const toggle = () => {
-    if (playing) {
-      stop();
-    } else {
+  // Auto-play on first user interaction
+  useEffect(() => {
+    if (autoplayAttempted.current) return;
+    autoplayAttempted.current = true;
+
+    const startOnInteraction = () => {
       playMelody();
-    }
-    setPlaying(!playing);
+      window.removeEventListener("click", startOnInteraction);
+      window.removeEventListener("keydown", startOnInteraction);
+      window.removeEventListener("touchstart", startOnInteraction);
+    };
+
+    window.addEventListener("click", startOnInteraction);
+    window.addEventListener("keydown", startOnInteraction);
+    window.addEventListener("touchstart", startOnInteraction);
+
+    return () => {
+      window.removeEventListener("click", startOnInteraction);
+      window.removeEventListener("keydown", startOnInteraction);
+      window.removeEventListener("touchstart", startOnInteraction);
+    };
+  }, [playMelody]);
+
+  const toggle = () => {
+    if (playing) stop();
+    else playMelody();
   };
 
   useEffect(() => {
