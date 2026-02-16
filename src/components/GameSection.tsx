@@ -2,8 +2,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import TetrisGame from "@/components/TetrisGame";
 import SnakeGame from "@/components/SnakeGame";
+import PongGame from "@/components/PongGame";
 
-const games = ["Tetris", "Snake"] as const;
+const games = ["Tetris", "Snake", "Pong"] as const;
 
 const GameSection = () => {
   const [activeGame, setActiveGame] = useState<typeof games[number]>("Tetris");
@@ -43,7 +44,7 @@ const GameSection = () => {
           </div>
 
           <div className="flex justify-center">
-            {activeGame === "Tetris" ? <TetrisGame /> : <SnakeGame />}
+            {activeGame === "Tetris" ? <TetrisGame /> : activeGame === "Snake" ? <SnakeGame /> : <PongGame />}
           </div>
         </motion.div>
       </div>
