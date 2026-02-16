@@ -7,18 +7,13 @@ const FishEasterEgg = () => {
   const [clickCount, setClickCount] = useState(0);
   const [fishPos, setFishPos] = useState({ x: 0, y: 50 });
 
-  // Swim across screen periodically
   useEffect(() => {
     const timer = setInterval(() => {
-      setFishPos({
-        x: 0,
-        y: 20 + Math.random() * 60,
-      });
+      setFishPos({ x: 0, y: 20 + Math.random() * 60 });
       setVisible(true);
       setTimeout(() => setVisible(false), 8000);
     }, 25000 + Math.random() * 20000);
 
-    // First appearance after 10 seconds
     const initial = setTimeout(() => {
       setFishPos({ x: 0, y: 40 + Math.random() * 30 });
       setVisible(true);
@@ -43,18 +38,22 @@ const FishEasterEgg = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 8, ease: "linear" }}
           onClick={handleClick}
-          title="🐟 You found me!"
+          title="🐟 You found Celine the Mackerel!"
         >
-          <motion.img
-            src={fishImg}
-            alt="Easter egg fish"
+          <motion.div
             className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+            style={{
+              backgroundImage: `url(${fishImg})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
             animate={{ y: [0, -10, 0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           />
           {clickCount > 0 && (
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-primary font-bold">
-              🐟 ×{clickCount}
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-primary font-bold whitespace-nowrap">
+              🐟 Celine ×{clickCount}
             </span>
           )}
         </motion.div>

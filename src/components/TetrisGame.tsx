@@ -112,6 +112,7 @@ const TetrisGame = () => {
   useEffect(() => {
     if (!started || gameOver) return;
     const handler = (e: KeyboardEvent) => {
+      if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," "].includes(e.key)) e.preventDefault();
       if (e.key === "ArrowLeft") move(-1, 0);
       else if (e.key === "ArrowRight") move(1, 0);
       else if (e.key === "ArrowDown") move(0, 1);

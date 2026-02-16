@@ -84,6 +84,7 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!started || gameOver) return;
     const handler = (e: KeyboardEvent) => {
+      if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
       const d = dirRef.current;
       if (e.key === "ArrowUp" && d.y !== 1) dirRef.current = { x: 0, y: -1 };
       else if (e.key === "ArrowDown" && d.y !== -1) dirRef.current = { x: 0, y: 1 };
