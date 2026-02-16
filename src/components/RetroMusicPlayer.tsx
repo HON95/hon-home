@@ -81,6 +81,8 @@ const RetroMusicPlayer = () => {
     gainNode.gain.value = 0.08;
     gainNode.connect(ctx.destination);
 
+    const melodyDuration = melody.reduce((sum, [, dur]) => sum + dur, 0);
+
     const scheduleLoop = (startTime: number) => {
       let t = startTime;
       for (const [note, dur] of melody) {
@@ -104,14 +106,23 @@ const RetroMusicPlayer = () => {
       return t;
     };
 
+    // Schedule several loops ahead to avoid gaps
     let nextStart = ctx.currentTime;
-    const loopFn = () => {
+    const LOOKAHEAD = 3; // schedule 3 loops ahead
+    for (let i = 0; i < LOOKAHEAD; i++) {
       nextStart = scheduleLoop(nextStart);
-      const delay = (nextStart - ctx.currentTime) * 1000 - 500;
-      const id = window.setTimeout(loopFn, Math.max(delay, 100));
+    }
+
+    const loopFn = () => {
+      // Keep scheduling more loops as time passes
+      while (nextStart - ctx.currentTime < melodyDuration * 2) {
+        nextStart = scheduleLoop(nextStart);
+      }
+      const id = window.setTimeout(loopFn, melodyDuration * 1000);
       timeoutIds.current.push(id);
     };
-    loopFn();
+    const id = window.setTimeout(loopFn, melodyDuration * 1000);
+    timeoutIds.current.push(id);
     setPlaying(true);
   }, []);
 
