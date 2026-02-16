@@ -66,7 +66,7 @@ const ProjectsSection = () => {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block bg-card border border-border rounded-lg p-6 hover:border-primary/40 transition-colors"
+              className="group block bg-card border border-border rounded-lg p-6 hover:border-primary/40 transition-all duration-300 hover:shadow-[0_0_20px_hsl(170_60%_50%/0.1)]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
