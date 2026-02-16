@@ -33,8 +33,8 @@ const FishEasterEgg = () => {
         <motion.div
           className="fixed z-40 pointer-events-auto cursor-pointer select-none"
           style={{ top: `${fishPos.y}%` }}
-          initial={{ x: "-100px" }}
-          animate={{ x: "calc(100vw + 100px)" }}
+          initial={{ x: "calc(100vw + 100px)" }}
+          animate={{ x: "-100px" }}
           exit={{ opacity: 0 }}
           transition={{ duration: 8, ease: "linear" }}
           onClick={handleClick}

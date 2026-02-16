@@ -48,11 +48,46 @@ const MELODIES: Melody[] = [
       ["A4", 0.9],
     ],
   },
+  {
+    name: "Ode to Joy",
+    notes: [
+      ["E4", 0.4], ["E4", 0.4], ["F4", 0.4], ["G4", 0.4],
+      ["G4", 0.4], ["F4", 0.4], ["E4", 0.4], ["D4", 0.4],
+      ["C4", 0.4], ["C4", 0.4], ["D4", 0.4], ["E4", 0.4],
+      ["E4", 0.6], ["D4", 0.2], ["D4", 0.8],
+      ["E4", 0.4], ["E4", 0.4], ["F4", 0.4], ["G4", 0.4],
+      ["G4", 0.4], ["F4", 0.4], ["E4", 0.4], ["D4", 0.4],
+      ["C4", 0.4], ["C4", 0.4], ["D4", 0.4], ["E4", 0.4],
+      ["D4", 0.6], ["C4", 0.2], ["C4", 0.8],
+    ],
+  },
+  {
+    name: "Swan Lake",
+    notes: [
+      ["A4", 0.3], ["B4", 0.3], ["C5", 0.6], ["B4", 0.3], ["A4", 0.3],
+      ["G4", 0.6], ["A4", 0.3], ["B4", 0.3], ["C5", 0.6],
+      ["E5", 0.3], ["D5", 0.3], ["C5", 0.6], ["B4", 0.3], ["A4", 0.3],
+      ["G4", 0.6], ["A4", 0.3], ["B4", 0.3],
+      ["A4", 0.3], ["B4", 0.3], ["C5", 0.6], ["D5", 0.3], ["E5", 0.3],
+      ["C5", 0.6], ["B4", 0.3], ["A4", 0.3], ["G4", 0.9],
+    ],
+  },
+  {
+    name: "Nocturne (Chopin)",
+    notes: [
+      ["E4", 0.6], ["G4", 0.3], ["C5", 0.3], ["B4", 0.6],
+      ["A4", 0.3], ["G4", 0.3], ["E4", 0.6], ["D4", 0.3], ["E4", 0.3],
+      ["G4", 0.6], ["A4", 0.3], ["G4", 0.3], ["E4", 0.6],
+      ["C4", 0.6], ["D4", 0.3], ["E4", 0.3], ["G4", 0.6],
+      ["E5", 0.3], ["D5", 0.3], ["C5", 0.6], ["B4", 0.3], ["A4", 0.3],
+      ["G4", 0.6], ["E4", 0.6],
+    ],
+  },
 ];
 
 const RetroMusicPlayer = () => {
   const [playing, setPlaying] = useState(false);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(() => Math.floor(Math.random() * MELODIES.length));
   const ctxRef = useRef<AudioContext | null>(null);
   const timeoutIds = useRef<number[]>([]);
   const autoplayAttempted = useRef(false);
@@ -132,7 +167,7 @@ const RetroMusicPlayer = () => {
     autoplayAttempted.current = true;
 
     const startOnInteraction = () => {
-      playMelody(0);
+      playMelody(trackIndex);
       window.removeEventListener("click", startOnInteraction);
       window.removeEventListener("keydown", startOnInteraction);
       window.removeEventListener("touchstart", startOnInteraction);

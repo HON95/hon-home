@@ -1,13 +1,26 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import TetrisGame from "@/components/TetrisGame";
-import SnakeGame from "@/components/SnakeGame";
-import PongGame from "@/components/PongGame";
+import { useState, lazy, Suspense } from "react";
 
-const games = ["Tetris", "Snake", "Pong"] as const;
+const TetrisGame = lazy(() => import("@/components/TetrisGame"));
+const SnakeGame = lazy(() => import("@/components/SnakeGame"));
+const PongGame = lazy(() => import("@/components/PongGame"));
+const BreakoutGame = lazy(() => import("@/components/BreakoutGame"));
+const MinesweeperGame = lazy(() => import("@/components/MinesweeperGame"));
+
+const games = ["Tetris", "Snake", "Pong", "Breakout", "Minesweeper"] as const;
 
 const GameSection = () => {
   const [activeGame, setActiveGame] = useState<typeof games[number]>("Tetris");
+
+  const renderGame = () => {
+    switch (activeGame) {
+      case "Tetris": return <TetrisGame />;
+      case "Snake": return <SnakeGame />;
+      case "Pong": return <PongGame />;
+      case "Breakout": return <BreakoutGame />;
+      case "Minesweeper": return <MinesweeperGame />;
+    }
+  };
 
   return (
     <section id="games" className="py-24 px-6 bg-muted/30">
@@ -27,7 +40,7 @@ const GameSection = () => {
           </p>
 
           {/* Game tabs */}
-          <div className="flex gap-2 mb-8 justify-center">
+          <div className="flex gap-2 mb-8 justify-center flex-wrap">
             {games.map((game) => (
               <button
                 key={game}
@@ -44,7 +57,9 @@ const GameSection = () => {
           </div>
 
           <div className="flex justify-center">
-            {activeGame === "Tetris" ? <TetrisGame /> : activeGame === "Snake" ? <SnakeGame /> : <PongGame />}
+            <Suspense fallback={<div className="font-mono text-xs text-muted-foreground">Loading...</div>}>
+              {renderGame()}
+            </Suspense>
           </div>
         </motion.div>
       </div>
