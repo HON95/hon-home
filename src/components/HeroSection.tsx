@@ -39,7 +39,6 @@ const HeroSection = () => {
           </p>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4">
             HON
-            <span className="text-primary">95</span>
           </h1>
 
           {/* Typewriter */}
