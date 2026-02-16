@@ -17,15 +17,11 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
-      {/* Overlay */}
       <div className="absolute inset-0 bg-background/70" />
-
-      {/* Floating particles */}
       <FloatingParticles />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pointer-events-none">
@@ -35,13 +31,12 @@ const HeroSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <p className="font-mono text-primary text-sm tracking-widest uppercase mb-4">
-            ~/håvard-ose-nordstrand
+            håvard-ose-nordstrand
           </p>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4">
             HON
           </h1>
 
-          {/* Typewriter */}
           <div className="h-8 md:h-10 mb-8 flex items-center justify-center">
             <span className="font-mono text-base md:text-lg text-primary/80">
               {typedText}
@@ -65,17 +60,16 @@ const HeroSection = () => {
               GitHub
             </a>
             <a
-              href="#projects"
+              href="#games"
               className="inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:bg-secondary transition-colors"
             >
               <ExternalLink className="w-5 h-5" />
-              Projects
+              Games
             </a>
           </div>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         animate={{ y: [0, 8, 0] }}

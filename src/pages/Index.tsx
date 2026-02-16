@@ -1,13 +1,13 @@
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
-import StatsSection from "@/components/StatsSection";
-import ProjectsSection from "@/components/ProjectsSection";
+import RandomFactsSection from "@/components/RandomFactsSection";
 import TechSection from "@/components/TechSection";
 import GameSection from "@/components/GameSection";
 import TerminalSection from "@/components/TerminalSection";
 import FooterSection from "@/components/FooterSection";
 import AiBanner from "@/components/AiBanner";
 import RetroMusicPlayer from "@/components/RetroMusicPlayer";
+import FishEasterEgg from "@/components/FishEasterEgg";
 
 const Index = () => {
   return (
@@ -17,13 +17,13 @@ const Index = () => {
         <HeroSection />
       </div>
       <AboutSection />
-      <StatsSection />
-      <ProjectsSection />
+      <RandomFactsSection />
       <TechSection />
       <GameSection />
       <TerminalSection />
       <FooterSection />
       <RetroMusicPlayer />
+      <FishEasterEgg />
     </main>
   );
 };
