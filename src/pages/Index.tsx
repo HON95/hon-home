@@ -7,6 +7,7 @@ import GameSection from "@/components/GameSection";
 import TerminalSection from "@/components/TerminalSection";
 import SoulsQuizSection from "@/components/SoulsQuizSection";
 import DarkSoulsMemes from "@/components/DarkSoulsMemes";
+import CakeBox from "@/components/CakeBox";
 import FooterSection from "@/components/FooterSection";
 import AiBanner from "@/components/AiBanner";
 import RetroMusicPlayer from "@/components/RetroMusicPlayer";
@@ -27,6 +28,7 @@ const Index = () => {
       <GameSection />
       <SoulsQuizSection />
       <DarkSoulsMemes />
+      <CakeBox />
       <TerminalSection />
       <FooterSection />
       <RetroMusicPlayer />
