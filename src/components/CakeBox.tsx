@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const taunts = [
@@ -20,29 +20,40 @@ const hideTaunts = [
 const ESCAPE_AT = 5;
 const HIDE_AT = 12;
 
+// Keep positions within visible viewport with padding
+const clampedRandom = () => {
+  const pad = 60;
+  const btnW = 220;
+  const btnH = 50;
+  return {
+    x: pad + Math.random() * (window.innerWidth - btnW - pad * 2),
+    y: pad + Math.random() * (window.innerHeight - btnH - pad * 2),
+  };
+};
+
 const CakeBox = () => {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [boxPos, setBoxPos] = useState({ x: 0, y: 0 });
+  const [freePos, setFreePos] = useState({ x: 200, y: 200 });
   const [taunt, setTaunt] = useState("🎂 Free cake! Click me!");
   const [attempts, setAttempts] = useState(0);
   const [escaped, setEscaped] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [hidingSpot, setHidingSpot] = useState<{ section: string; style: React.CSSProperties } | null>(null);
+  const hidingRotation = useRef(0);
 
   const dodge = useCallback(() => {
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
 
-    if (newAttempts >= HIDE_AT && !hidden) {
-      // Hide behind a page element
+    if (newAttempts >= HIDE_AT && !hidden && escaped) {
       setHidden(true);
+      hidingRotation.current = Math.random() > 0.5 ? 8 : -8;
       const spots = [
-        { section: "Behind the footer", style: { position: "fixed" as const, bottom: "80px", left: "50%", transform: "translateX(-50%)", zIndex: 40 } },
-        { section: "Peeking from the corner", style: { position: "fixed" as const, bottom: "100px", right: "-40px", zIndex: 40 } },
-        { section: "Above the music player", style: { position: "fixed" as const, bottom: "70px", right: "120px", zIndex: 40 } },
-        { section: "Top left corner", style: { position: "fixed" as const, top: "60px", left: "-30px", zIndex: 40 } },
+        { x: window.innerWidth - 30, y: window.innerHeight - 120 },
+        { x: -20, y: window.innerHeight / 2 },
+        { x: window.innerWidth / 2, y: window.innerHeight - 40 },
+        { x: window.innerWidth - 50, y: 80 },
       ];
-      const spot = spots[Math.floor(Math.random() * spots.length)];
-      setHidingSpot(spot);
+      setFreePos(spots[Math.floor(Math.random() * spots.length)]);
       setTaunt(hideTaunts[Math.floor(Math.random() * hideTaunts.length)]);
       return;
     }
@@ -50,36 +61,27 @@ const CakeBox = () => {
     if (newAttempts >= ESCAPE_AT && !escaped) {
       setEscaped(true);
       setTaunt(escapeTaunts[Math.floor(Math.random() * escapeTaunts.length)]);
-      // Random position on viewport
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      setPos({ x: Math.random() * (vw - 200) - vw / 2 + 100, y: Math.random() * (vh - 200) - vh / 2 + 100 });
+      setFreePos(clampedRandom());
       return;
     }
 
     if (escaped) {
       setTaunt(escapeTaunts[Math.floor(Math.random() * escapeTaunts.length)]);
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      setPos({ x: Math.random() * (vw - 240), y: Math.random() * (vh - 100) });
+      setFreePos(clampedRandom());
     } else {
       setTaunt(taunts[Math.floor(Math.random() * taunts.length)]);
-      const maxX = 250;
-      const maxY = 80;
-      setPos({ x: Math.random() * maxX * 2 - maxX, y: Math.random() * maxY * 2 - maxY });
+      setBoxPos({
+        x: (Math.random() - 0.5) * 500,
+        y: (Math.random() - 0.5) * 160,
+      });
     }
   }, [attempts, escaped, hidden]);
 
   const dodgeHidden = useCallback(() => {
-    // Found it! It runs away again
     setHidden(false);
-    setHidingSpot(null);
-    setEscaped(true);
     setAttempts((a) => a + 1);
     setTaunt("You found me?! NO!");
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    setPos({ x: Math.random() * (vw - 240), y: Math.random() * (vh - 100) });
+    setFreePos(clampedRandom());
   }, []);
 
   return (
@@ -98,11 +100,10 @@ const CakeBox = () => {
             <div className="h-px bg-border mb-10" />
 
             <div className="relative h-64 bg-card border border-border rounded-lg overflow-hidden flex items-center justify-center">
-              {/* Box-contained cake (before escape) */}
               {!escaped && !hidden && (
                 <motion.button
                   className="absolute bg-amber-400/10 border border-amber-400/30 text-amber-400 px-6 py-3 rounded-lg font-serif font-medium cursor-pointer select-none hover:bg-amber-400/20 transition-colors z-10"
-                  animate={{ x: pos.x, y: pos.y }}
+                  animate={{ x: boxPos.x, y: boxPos.y }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   onMouseEnter={dodge}
                   onTouchStart={dodge}
@@ -112,7 +113,6 @@ const CakeBox = () => {
                 </motion.button>
               )}
 
-              {/* Empty box message after escape */}
               {(escaped || hidden) && (
                 <motion.p
                   className="font-mono text-xs text-muted-foreground/40 text-center"
@@ -130,7 +130,7 @@ const CakeBox = () => {
                   Attempts: {attempts}
                 </span>
               )}
-              {attempts >= 10 && !hidden && (
+              {attempts >= 10 && (
                 <span className="absolute bottom-3 left-4 font-mono text-xs text-muted-foreground/50">
                   The cake was never real.
                 </span>
@@ -140,16 +140,17 @@ const CakeBox = () => {
         </div>
       </section>
 
-      {/* Escaped cake - roams the viewport */}
+      {/* Escaped cake — flies smoothly around the viewport */}
       <AnimatePresence>
         {escaped && !hidden && (
           <motion.button
-            className="fixed bg-amber-400/10 border border-amber-400/30 text-amber-400 px-6 py-3 rounded-lg font-serif font-medium cursor-pointer select-none hover:bg-amber-400/20 transition-colors backdrop-blur-sm shadow-lg"
+            key="escaped-cake"
+            className="fixed bg-amber-400/10 border border-amber-400/30 text-amber-400 px-6 py-3 rounded-lg font-serif font-medium cursor-pointer select-none hover:bg-amber-400/20 backdrop-blur-sm shadow-lg"
             style={{ zIndex: 90, top: 0, left: 0 }}
-            animate={{ x: pos.x, y: pos.y }}
-            initial={{ scale: 1.2, opacity: 0 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 18 }}
+            animate={{ x: freePos.x, y: freePos.y }}
+            initial={{ x: freePos.x, y: freePos.y, opacity: 1 }}
+            exit={{ scale: 0.3, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 120, damping: 14, mass: 0.8 }}
             onMouseEnter={dodge}
             onTouchStart={dodge}
             onClick={dodge}
@@ -159,17 +160,24 @@ const CakeBox = () => {
         )}
       </AnimatePresence>
 
-      {/* Hidden cake - peeking from a corner */}
+      {/* Hidden cake — peeking from edge */}
       <AnimatePresence>
-        {hidden && hidingSpot && (
+        {hidden && (
           <motion.button
-            className="bg-amber-400/10 border border-amber-400/30 text-amber-400 px-4 py-2 rounded-lg font-serif text-sm font-medium cursor-pointer select-none hover:bg-amber-400/20 transition-colors backdrop-blur-sm shadow-lg"
-            style={hidingSpot.style}
-            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-            animate={{ opacity: 0.7, scale: 1, rotate: Math.random() > 0.5 ? 5 : -5 }}
+            key="hidden-cake"
+            className="fixed bg-amber-400/10 border border-amber-400/30 text-amber-400 px-4 py-2 rounded-lg font-serif text-sm font-medium cursor-pointer select-none hover:bg-amber-400/20 backdrop-blur-sm shadow-lg"
+            style={{ zIndex: 90, top: 0, left: 0 }}
+            initial={{ x: freePos.x, y: freePos.y, opacity: 0, scale: 0.5 }}
+            animate={{
+              x: freePos.x,
+              y: freePos.y,
+              opacity: 0.7,
+              scale: 1,
+              rotate: hidingRotation.current,
+            }}
             exit={{ opacity: 0, scale: 0 }}
-            whileHover={{ opacity: 1, scale: 1.05 }}
-            transition={{ duration: 0.5, delay: 1.5 }}
+            whileHover={{ opacity: 1, scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 100, damping: 12, delay: 1 }}
             onClick={dodgeHidden}
             onMouseEnter={dodgeHidden}
           >
