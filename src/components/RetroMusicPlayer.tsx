@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
+import { musicEvents } from "@/lib/musicEvents";
 
 const NOTES: Record<string, number> = {
   C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
@@ -161,28 +162,24 @@ const RetroMusicPlayer = () => {
     setPlaying(true);
   }, []);
 
-  // Auto-play on first user interaction
+  // Listen for pause/resume events from quiz
+  const wasPlayingRef = useRef(false);
+
   useEffect(() => {
-    if (autoplayAttempted.current) return;
-    autoplayAttempted.current = true;
-
-    const startOnInteraction = () => {
-      playMelody(trackIndex);
-      window.removeEventListener("click", startOnInteraction);
-      window.removeEventListener("keydown", startOnInteraction);
-      window.removeEventListener("touchstart", startOnInteraction);
-    };
-
-    window.addEventListener("click", startOnInteraction);
-    window.addEventListener("keydown", startOnInteraction);
-    window.addEventListener("touchstart", startOnInteraction);
-
-    return () => {
-      window.removeEventListener("click", startOnInteraction);
-      window.removeEventListener("keydown", startOnInteraction);
-      window.removeEventListener("touchstart", startOnInteraction);
-    };
-  }, [playMelody]);
+    const unsubPause = musicEvents.on("pause-background", () => {
+      if (playing) {
+        wasPlayingRef.current = true;
+        stopAudio();
+      }
+    });
+    const unsubResume = musicEvents.on("resume-background", () => {
+      if (wasPlayingRef.current) {
+        wasPlayingRef.current = false;
+        playMelody(trackIndex);
+      }
+    });
+    return () => { unsubPause(); unsubResume(); };
+  }, [playing, stopAudio, playMelody, trackIndex]);
 
   const toggle = () => {
     if (playing) stopAudio();
