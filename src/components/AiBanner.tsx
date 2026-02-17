@@ -12,9 +12,9 @@ const AiBanner = () => {
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-center gap-3 text-sm font-medium">
         <Bot className="w-5 h-5 animate-bounce" />
         <span>
-          🤖 This entire website was AI-generated because the owner was too lazy to make one themselves — all info and facts are random and may or may not be true
+          🤖 This entire website is completely useless — 100% AI-generated with random content because the owner was too lazy to make one themselves. Nothing here is real. You've been warned.
         </span>
-        <span className="text-lg">😴</span>
+        <span className="text-lg">🗑️</span>
       </div>
     </motion.div>
   );
