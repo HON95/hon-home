@@ -9,7 +9,7 @@ import FooterSection from "@/components/FooterSection";
 import AiBanner from "@/components/AiBanner";
 import RetroMusicPlayer from "@/components/RetroMusicPlayer";
 import FishEasterEgg from "@/components/FishEasterEgg";
-import EldenRingEasterEgg from "@/components/EldenRingEasterEgg";
+import DarkSoulsEasterEgg from "@/components/DarkSoulsEasterEgg";
 
 const Index = () => {
   return (
@@ -27,7 +27,7 @@ const Index = () => {
       <FooterSection />
       <RetroMusicPlayer />
       <FishEasterEgg />
-      <EldenRingEasterEgg />
+      <DarkSoulsEasterEgg />
     </main>
   );
 };

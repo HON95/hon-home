@@ -60,7 +60,7 @@ source:        RIPE # Filtered (with love)`,
 
 const TerminalSection = () => {
   const [history, setHistory] = useState<{ cmd: string; output: string }[]>([
-    { cmd: "", output: 'Welcome to HON95 terminal. Type "help" to get started.\n\n🔥 Bonfire lit. You may rest here, Tarnished.' },
+    { cmd: "", output: 'Welcome to HON95 terminal. Type "help" to get started.\n\n🔥 Bonfire lit. You may rest here, Undead.' },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

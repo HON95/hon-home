@@ -12,7 +12,7 @@ const techGroups = [
   },
   {
     label: "Interests",
-    items: ["IoT", "Monitoring", "Homelab", "Open Source", "DNS", "IPv6", "Home Automation", "LAN Parties", "Elden Ring"],
+    items: ["IoT", "Monitoring", "Homelab", "Open Source", "DNS", "IPv6", "Home Automation", "LAN Parties", "Dark Souls"],
   },
 ];
 
