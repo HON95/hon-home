@@ -16,7 +16,7 @@ const fetchRealIp = async (): Promise<string> => {
 };
 
 const COMMANDS: Record<string, string | (() => string | Promise<string>)> = {
-  help: "Available commands: help, ip, skills, projects, uptime, ping, whois, clear",
+  help: "Available commands: help, ip, skills, projects, uptime, ping, whois, praise, estus, clear",
   skills: "Rust • Go • C++ • Python • Docker • Prometheus • Linux • Networking • IoT",
   projects: "prometheus-nut-exporter (⭐133) | prometheus-esp8266-dht-exporter (⭐42) | wiki | configs",
   uptime: `Uptime: ${Math.floor((Date.now() - new Date("2010-01-01").getTime()) / 86400000)} days (since first GitHub commit)`,
@@ -44,11 +44,23 @@ remarks:       "It's not hoarding if it's network infrastructure."
 created:       Yes
 last-modified: Probably recently
 source:        RIPE # Filtered (with love)`,
+  praise: `
+    \\\\[T]/
+     |
+    / \\
+  
+  ☀️ PRAISE THE SUN! ☀️
+  
+  If only I could be so grossly incandescent...`,
+  estus: () => {
+    const hp = Math.floor(Math.random() * 400) + 600;
+    return `🧪 *drinks Estus Flask*\n\nHP restored: ${hp}/1000\nEstus Flask: ${Math.floor(Math.random() * 5) + 1} remaining\n\n"Very good!"`;
+  },
 };
 
 const TerminalSection = () => {
   const [history, setHistory] = useState<{ cmd: string; output: string }[]>([
-    { cmd: "", output: 'Welcome to HON95 terminal. Type "help" to get started.' },
+    { cmd: "", output: 'Welcome to HON95 terminal. Type "help" to get started.\n\n🔥 Bonfire lit. You may rest here, Tarnished.' },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

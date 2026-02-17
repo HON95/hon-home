@@ -5,9 +5,14 @@ const FooterSection = () => {
   return (
     <footer className="py-12 px-6 border-t border-border">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="font-mono text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Håvard Ose Nordstrand
-        </p>
+        <div>
+          <p className="font-mono text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Håvard Ose Nordstrand
+          </p>
+          <p className="font-serif text-[10px] text-amber-400/40 italic mt-1">
+            "Don't you dare go Hollow."
+          </p>
+        </div>
         <div className="flex items-center gap-4">
           <Link
             to="/wiki"
