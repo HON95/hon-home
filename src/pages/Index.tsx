@@ -1,6 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import RandomFactsSection from "@/components/RandomFactsSection";
+import DailyPicksSection from "@/components/DailyPicksSection";
 import TechSection from "@/components/TechSection";
 import GameSection from "@/components/GameSection";
 import TerminalSection from "@/components/TerminalSection";
@@ -21,6 +22,7 @@ const Index = () => {
       </div>
       <AboutSection />
       <RandomFactsSection />
+      <DailyPicksSection />
       <TechSection />
       <GameSection />
       <SoulsQuizSection />
