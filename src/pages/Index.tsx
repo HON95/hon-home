@@ -4,6 +4,7 @@ import RandomFactsSection from "@/components/RandomFactsSection";
 import TechSection from "@/components/TechSection";
 import GameSection from "@/components/GameSection";
 import TerminalSection from "@/components/TerminalSection";
+import SoulsQuizSection from "@/components/SoulsQuizSection";
 import FooterSection from "@/components/FooterSection";
 import AiBanner from "@/components/AiBanner";
 import RetroMusicPlayer from "@/components/RetroMusicPlayer";
@@ -21,6 +22,7 @@ const Index = () => {
       <RandomFactsSection />
       <TechSection />
       <GameSection />
+      <SoulsQuizSection />
       <TerminalSection />
       <FooterSection />
       <RetroMusicPlayer />
