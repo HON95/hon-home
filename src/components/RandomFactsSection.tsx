@@ -62,6 +62,11 @@ const facts = [
     title: "Wiki Maintainer",
     text: "Maintains a massive personal wiki covering Linux, networking, containers, and more. It's basically a second brain on GitHub.",
   },
+  {
+    icon: Shield,
+    title: "Souls Veteran",
+    text: "Has died more times in Dark Souls than packets dropped on the network. Still links the fire every playthrough.",
+  },
 ];
 
 const RandomFactsSection = () => {

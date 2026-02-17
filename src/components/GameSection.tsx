@@ -94,7 +94,7 @@ const GameSection = () => {
             </div>
             <div className="h-px bg-border mb-4" />
             <p className="text-muted-foreground text-sm mb-6">
-              Take a break. The music is already playing. 🎵
+              Rest at this bonfire, Tarnished. The music is already playing. 🔥
             </p>
 
             {!fullscreen && gameContent}
@@ -133,7 +133,7 @@ const GameSection = () => {
             </div>
 
             <p className="absolute bottom-4 font-mono text-xs text-muted-foreground">
-              Press <span className="text-primary">Esc</span> to exit fullscreen
+              Press <span className="text-primary">Esc</span> to return to the bonfire
             </p>
           </motion.div>
         )}
