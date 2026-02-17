@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skull, Trophy, RotateCcw } from "lucide-react";
+import { useBossMusic } from "@/hooks/useBossMusic";
 
 interface Question {
   question: string;
@@ -108,6 +109,7 @@ const SoulsQuizSection = () => {
   const [showResult, setShowResult] = useState(false);
   const [finished, setFinished] = useState(false);
   const [usedIndices, setUsedIndices] = useState<number[]>([]);
+  const { play: playBossMusic, stop: stopBossMusic } = useBossMusic();
 
   const TOTAL_QUESTIONS = 7;
 
@@ -129,7 +131,13 @@ const SoulsQuizSection = () => {
     setSelected(null);
     setShowResult(false);
     setFinished(false);
+    playBossMusic();
   };
+
+  // Stop boss music when quiz ends
+  useEffect(() => {
+    if (finished) stopBossMusic();
+  }, [finished, stopBossMusic]);
 
   const q = started ? questions[usedIndices[currentQ]] : null;
   const isCorrect = selected !== null && q && selected === q.answer;
