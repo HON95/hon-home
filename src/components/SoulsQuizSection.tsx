@@ -25,21 +25,21 @@ const questions: Question[] = [
   },
   {
     question: "What do you burn at a bonfire in Dark Souls?",
-    options: ["Souls", "Humanity", "Embers", "Runes"],
+    options: ["Souls", "Humanity", "Embers", "Titanite"],
     answer: 1,
     lore: "Burning Humanity at bonfires kindles them, increasing your Estus Flask uses.",
   },
   {
-    question: "Which Elden Ring boss is known as the 'Blade of Miquella'?",
-    options: ["Radahn", "Malenia", "Morgott", "Rennala"],
+    question: "Which Dark Souls boss guards the entrance to Blighttown?",
+    options: ["Quelaag", "Capra Demon", "Gaping Dragon", "Ceaseless Discharge"],
     answer: 1,
-    lore: "Malenia has never known defeat — and she will remind you. Repeatedly.",
+    lore: "The Capra Demon ambushes you in a tiny room with two dogs. A rite of passage.",
   },
   {
-    question: "What is the Elden Ring's Lands Between ruled by?",
-    options: ["The Great Runes", "The Erdtree", "The Darksign", "The First Flame"],
+    question: "What is the Darksign?",
+    options: ["A weapon", "A curse branded on the Undead", "A covenant symbol", "A bonfire upgrade"],
     answer: 1,
-    lore: "The Erdtree is a colossal, golden tree that blesses the Lands Between with its grace.",
+    lore: "The Darksign is a ring of fire branded upon the Undead, binding them to an endless cycle of death.",
   },
   {
     question: "In Dark Souls, what happens when you 'go Hollow'?",
@@ -54,22 +54,22 @@ const questions: Question[] = [
     lore: "Trusty Patches has been kicking players into holes across every Souls game. Never trust him.",
   },
   {
-    question: "What are the golden trails that guide you in Elden Ring?",
-    options: ["Grace Lines", "Guidance of Gold", "Rays of Grace", "Sites of Grace"],
-    answer: 3,
-    lore: "Sites of Grace are rest points scattered across the Lands Between, guiding the Tarnished.",
+    question: "What do you ring in Dark Souls to progress the story?",
+    options: ["The Bells of Awakening", "The Chime of Want", "The Archstone Bell", "The Lordvessel"],
+    answer: 0,
+    lore: "Two Bells of Awakening must be rung — one above in the Undead Church, one below in Blighttown.",
   },
   {
     question: "Who is the final boss of Dark Souls III?",
-    options: ["Nameless King", "Soul of Cinder", "Gael", "Gwyn"],
+    options: ["Nameless King", "Soul of Cinder", "Slave Knight Gael", "Gwyn"],
     answer: 1,
     lore: "The Soul of Cinder is an amalgamation of all Lords of Cinder, including Gwyn himself.",
   },
   {
-    question: "What item do you use to level up in Elden Ring?",
-    options: ["Souls", "Echoes", "Runes", "Embers"],
+    question: "What currency do you use to level up in Dark Souls?",
+    options: ["Runes", "Echoes", "Souls", "Embers"],
     answer: 2,
-    lore: "Runes are the currency of the Lands Between — and you'll lose them. A lot.",
+    lore: "Souls are the essence of life in Lordran — and you'll lose them. A lot.",
   },
   {
     question: "Which Dark Souls boss is fought on a bridge and breathes fire?",
@@ -78,27 +78,27 @@ const questions: Question[] = [
     lore: "The Hellkite Drake (Red Dragon) terrorizes the bridge in Undead Burg, roasting the unprepared.",
   },
   {
-    question: "What creature do Elden Ring players call a 'dog'?",
-    options: ["Wolves", "Turtles", "Rats", "Crabs"],
+    question: "What is Siegmeyer of Catarina's iconic armor shaped like?",
+    options: ["A barrel", "An onion", "A pumpkin", "A cauldron"],
     answer: 1,
-    lore: "\"Could this be a dog?\" — Every soapstone message next to a turtle. Every. Single. One.",
+    lore: "Siegmeyer's Catarina armor is affectionately called 'Onion Knight' armor by the community. Hmmmm...",
   },
 ];
 
 const deathMessages = [
   "YOU DIED... intellectually.",
   "Skill issue.",
-  "Try again, Tarnished.",
+  "Try again, Undead.",
   "Git gud (at trivia).",
-  "Maidenless answer.",
+  "You have gone Hollow.",
 ];
 
 const praiseMessages = [
   "Very good!",
   "Praise the Sun! \\[T]/",
-  "A worthy Tarnished!",
+  "A worthy Undead!",
   "Humanity Restored!",
-  "GREAT FOE FELLED",
+  "VICTORY ACHIEVED",
 ];
 
 const SoulsQuizSection = () => {
@@ -162,11 +162,11 @@ const SoulsQuizSection = () => {
   const getTitle = () => {
     const pct = score / TOTAL_QUESTIONS;
     if (pct === 1) return "Lord of Cinder";
-    if (pct >= 0.85) return "Elden Lord";
+    if (pct >= 0.85) return "Chosen Undead";
     if (pct >= 0.7) return "Ashen One";
-    if (pct >= 0.5) return "Tarnished";
+    if (pct >= 0.5) return "Undead Warrior";
     if (pct >= 0.3) return "Hollow";
-    return "Maidenless";
+    return "Deprived";
   };
 
   return (
@@ -197,7 +197,7 @@ const SoulsQuizSection = () => {
                   Test Your Souls Knowledge
                 </h3>
                 <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
-                  {TOTAL_QUESTIONS} questions from Dark Souls & Elden Ring.
+                  {TOTAL_QUESTIONS} questions from the Dark Souls universe.
                   Prove you're no Hollow.
                 </p>
                 <button
@@ -312,7 +312,7 @@ const SoulsQuizSection = () => {
                   {score === TOTAL_QUESTIONS
                     ? "You have proven yourself worthy. The Age of Fire continues."
                     : score >= TOTAL_QUESTIONS * 0.7
-                    ? "A worthy warrior. The Erdtree acknowledges you."
+                    ? "A worthy warrior. The First Flame burns brighter."
                     : score >= TOTAL_QUESTIONS * 0.4
                     ? "You survived, barely. Perhaps try leveling up?"
                     : "YOU DIED. Repeatedly. Maybe try the wiki first?"}

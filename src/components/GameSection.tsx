@@ -94,7 +94,7 @@ const GameSection = () => {
             </div>
             <div className="h-px bg-border mb-4" />
             <p className="text-muted-foreground text-sm mb-6">
-              Rest at this bonfire, Tarnished. The music is already playing. 🔥
+              Rest at this bonfire, Undead. The music is already playing. 🔥
             </p>
 
             {!fullscreen && gameContent}
