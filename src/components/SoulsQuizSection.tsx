@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skull, Trophy, RotateCcw } from "lucide-react";
-import { useBossMusic } from "@/hooks/useBossMusic";
 import { musicEvents } from "@/lib/musicEvents";
 
 interface Question {
@@ -114,7 +113,6 @@ const SoulsQuizSection = () => {
   const [showResult, setShowResult] = useState(false);
   const [finished, setFinished] = useState(false);
   const [usedIndices, setUsedIndices] = useState<number[]>([]);
-  const { play: playBossMusic, stop: stopBossMusic } = useBossMusic();
 
   const pool = questionPools[game];
   const questionsCount = Math.min(TOTAL_QUESTIONS, pool.length);
@@ -137,16 +135,22 @@ const SoulsQuizSection = () => {
     setSelected(null);
     setShowResult(false);
     setFinished(false);
-    musicEvents.emit("pause-background");
-    playBossMusic();
+    musicEvents.emit("start-boss-music");
   };
 
   useEffect(() => {
     if (finished) {
-      stopBossMusic();
-      musicEvents.emit("resume-background");
+      musicEvents.emit("stop-boss-music");
     }
-  }, [finished, stopBossMusic]);
+  }, [finished]);
+
+  // If player skips away from boss music mid-quiz, just let it go
+  useEffect(() => {
+    const unsub = musicEvents.on("boss-music-stopped", () => {
+      // Boss music was skipped by user — no action needed
+    });
+    return unsub;
+  }, []);
 
   const q = started ? pool[usedIndices[currentQ]] : null;
   const isCorrect = selected !== null && q && selected === q.answer;
@@ -186,8 +190,7 @@ const SoulsQuizSection = () => {
 
   const switchGame = (g: GameKey) => {
     if (started && !finished) {
-      stopBossMusic();
-      musicEvents.emit("resume-background");
+      musicEvents.emit("stop-boss-music");
     }
     setGame(g);
     setStarted(false);
