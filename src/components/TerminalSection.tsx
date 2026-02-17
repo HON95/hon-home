@@ -54,8 +54,10 @@ const TerminalSection = () => {
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const hasInteracted = useRef(false);
 
   useEffect(() => {
+    if (!hasInteracted.current) return;
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
 
@@ -63,6 +65,7 @@ const TerminalSection = () => {
     e.preventDefault();
     const cmd = input.trim().toLowerCase();
     if (!cmd || loading) return;
+    hasInteracted.current = true;
 
     if (cmd === "clear") {
       setHistory([]);
@@ -149,7 +152,7 @@ const TerminalSection = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   className="flex-1 bg-transparent outline-none text-foreground caret-primary"
-                  autoFocus
+                  
                   spellCheck={false}
                   disabled={loading}
                 />
